@@ -1,7 +1,21 @@
-import React ,{} from 'react';
-import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
+import React, {useEffect} from 'react';
+import {View, Text, StyleSheet, FlatList, TouchableOpacity} from 'react-native';
+import {useDispatch, useSelector} from 'react-redux';
+import {getTodos} from './redux/features/todo/todoSlice';
+import {useAppDispatch} from './redux/Store';
+import {RootState} from './redux/Store';
 
 const TodoList = () => {
+  //   const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
+  const {todoResponse} = useSelector((state: RootState) => state.todos);
+
+  // console.log('todoResponse=>',todoResponse)
+
+  useEffect(() => {
+    dispatch(getTodos());
+  }, []);
+
   const editHandler = () => {
     console.log('EditHandler');
   };
@@ -9,15 +23,20 @@ const TodoList = () => {
   const deleteHandler = () => {
     console.log('deleteHandler');
   };
-  return (
-    <View style={styles.container}>
-    
-        {/* <View style={{...styles.OuterWraper,height:'30%'}}>
+
+
+  const handleEmpty= ()=>{
+    return(
+      <View style={{...styles.OuterWraper,height:'30%'}}>
             <Text style={{...styles.todoMarked,alignSelf:'center'}}> You have nothing to do!</Text>
-        </View> */}
-      
+        </View>
+    )
+  }
+
+  const renderItem = ({item}:any) => {
+    return (
       <View style={styles.OuterWraper}>
-        <Text style={styles.todoItem}>Title Title</Text>
+        <Text style={styles.todoItem}>{item.todo}</Text>
         <View style={styles.InnerWraper}>
           <Text style={styles.todoMarked}>Mark completed</Text>
           <View style={styles.BtnWrapper}>
@@ -30,7 +49,20 @@ const TodoList = () => {
           </View>
         </View>
       </View>
+    );
+  };
 
+
+  return (
+    <View style={styles.container}>
+      <FlatList
+        contentContainerStyle={{paddingBottom: 200}}
+        ListEmptyComponent={handleEmpty}
+        data={todoResponse}
+        extraData={todoResponse}
+        renderItem={renderItem}
+        // keyExtractor={item => item.id}
+      />
     </View>
   );
 };
