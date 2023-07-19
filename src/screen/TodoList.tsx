@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react';
 import {View, Text, StyleSheet, FlatList, TouchableOpacity} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
-import {getTodos} from './redux/features/todo/todoSlice';
+import {getTodos,deleteTodo} from './redux/features/todo/todoSlice';
 import {useAppDispatch} from './redux/Store';
 import {RootState} from './redux/Store';
 
@@ -20,20 +20,27 @@ const TodoList = () => {
     console.log('EditHandler');
   };
 
-  const deleteHandler = () => {
+  const deleteHandler = (todoId:number) => {
     console.log('deleteHandler');
+    dispatch(deleteTodo(todoId));
+    // setTitle('');
+
   };
 
-
-  const handleEmpty= ()=>{
-    return(
-      <View style={{...styles.OuterWraper,height:'30%'}}>
-            <Text style={{...styles.todoMarked,alignSelf:'center'}}> You have nothing to do!</Text>
+  const handleEmpty = () => {
+    return (
+      // todoResponse.length==0 && (
+        <View style={{...styles.OuterWraper, height: '30%'}}>
+          <Text style={{...styles.todoMarked, alignSelf: 'center'}}>
+            {' '}
+            You have nothing to do!
+          </Text>
         </View>
-    )
-  }
+      // )
+    );
+  };
 
-  const renderItem = ({item}:any) => {
+  const renderItem = ({item}: any) => {
     return (
       <View style={styles.OuterWraper}>
         <Text style={styles.todoItem}>{item.todo}</Text>
@@ -43,7 +50,7 @@ const TodoList = () => {
             <TouchableOpacity onPress={() => editHandler()}>
               <Text style={styles.btn}>Edit</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => deleteHandler()}>
+            <TouchableOpacity onPress={() => deleteHandler(item.id)}>
               <Text style={styles.btn}>Delete</Text>
             </TouchableOpacity>
           </View>
@@ -51,7 +58,6 @@ const TodoList = () => {
       </View>
     );
   };
-
 
   return (
     <View style={styles.container}>

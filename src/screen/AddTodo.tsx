@@ -6,13 +6,25 @@ import {
   TouchableOpacity,
   TextInput,
 } from 'react-native';
+import { useDispatch } from 'react-redux';
+import {addTodo} from './redux/features/todo/todoSlice';
+import { useAppDispatch } from './redux/Store';
 
 const AddTodo = () => {
+  // const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const [title, setTitle] = useState('Aruuu');
   
   const addTodoItem = () => {
     console.log('addTodoItem');
+    const body = {
+      todo: title,
+      completed: false,
+      userId: 1,
+    };
+    dispatch(addTodo(body))
   };
+
   return (
     <View style={styles.inputWrp}>
       <TextInput
